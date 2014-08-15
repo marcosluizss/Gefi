@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="menu_principal">
+        <item>Adicionar Banco</item>
+        <item>Adicionar Conta Brancária</item>
+        <item>Adicionar Movimentação</item>
+        <item>Adicionar Cartão de Crádito</item>
+    </string-array>
+</resources>

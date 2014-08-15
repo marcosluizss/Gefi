@@ -1,36 +1,47 @@
 package br.com.ml2s.gefi;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
-//teste
 public class Login extends Activity {
+
+    private Button btEntrar;
+    private EditText etSenhaTela;
+    private String txtSenhaBD = "123";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        btEntrar = (Button)findViewById(R.id.bt_entrar);
+        etSenhaTela = (EditText)findViewById(R.id.et_login_senha);
+
+        btEntrar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String txtSenhaTela = etSenhaTela.getText().toString();
+                // buscar a senha de banco
+                if(txtSenhaBD.equals(txtSenhaTela)){
+                    //abre aplicação
+                    Intent intent = new Intent(Login.this,Home.class);
+                    startActivity(intent);
+                }else{
+                    //exibe mensagem de erro
+                    String txtMsgErro = getString(R.string.login_msg_erro);
+                    Toast alerta = Toast.makeText(Login.this, txtMsgErro,Toast.LENGTH_SHORT);
+                    alerta.show();
+                }
+            }
+        });
+
     }
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.login, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
 }
