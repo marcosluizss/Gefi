@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="tipos_conta">
+        <item>Conta Corrente</item>
+        <item>Pupança</item>
+        <item>Carteira</item>
+        <item>Outros</item>
+    </string-array>
+
+    <string-array name="bancos">
+        <item>Itau</item>
+        <item>HSBC</item>
+        <item>Santander</item>
+    </string-array>
+
+</resources>
