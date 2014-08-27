@@ -8,5 +8,11 @@
     <string name="login_senha">Senha</string>
     <string name="login_entrar">Entrar</string>
     <string name="login_msg_erro">Senha inválida.</string>
+    <string name="remover">Remover</string>
+
+    <string name="confirmacao_exclusao">Confirma a exclusão?</string>
+    <string name="sim">Sim</string>
+    <string name="nao">Não</string>
+
 
 </resources>

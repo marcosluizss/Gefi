@@ -5,15 +5,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -33,10 +30,10 @@ public class MenuList extends ListFragment {
     }
 
     String[] txtItem = new String[] {
-            "Minhas Contas",
-            "NAN",
-            "Cartões",
-            "Movimentações"
+            "Meus Bancos",
+            "Minhas Finanças",
+            "Meus Cartões",
+            "Minhas Contas"
     };
 
     int[] img = new int[]{
@@ -90,25 +87,31 @@ public class MenuList extends ListFragment {
 
     @Override
     public void onListItemClick(ListView lvMenu, View view, int posicao, long id ){
-        Toast alerta = Toast.makeText(getActivity(), "Item clicado " + posicao, Toast.LENGTH_SHORT );
-        alerta.show();
 
         switch (posicao) {
-
-            case 0:
-                FrameLayout frame = (FrameLayout) getActivity().findViewById(R.id.fl_menu_container);
-                frame.removeAllViews();
-
-                CadastroConta newFragment = new CadastroConta();
-                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.fl_menu_container, newFragment);
-                transaction.setBreadCrumbTitle("Minhas Contas");
-                transaction.addToBackStack(null);
-                transaction.commit();
-
+            case 0: trocaFragment(new BancosList());
+                 break;
+            case 1: trocaFragment(new FinancasList());
+                 break;
+            case 2: trocaFragment(new CartoesList());
+                break;
+            case 3: trocaFragment(new ContasList());
+                break;
+            default:
+                Toast alerta = Toast.makeText(getActivity(), "Opção não encontrada.", Toast.LENGTH_SHORT );
+                alerta.show();
         }
 
+    }
 
+    private void trocaFragment(Fragment newFragment){
+        FrameLayout frame = (FrameLayout) getActivity().findViewById(R.id.fl_menu_container);
+        frame.removeAllViews();
+
+        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.fl_menu_container, newFragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 
 }

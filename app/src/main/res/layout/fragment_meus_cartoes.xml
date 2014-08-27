@@ -2,7 +2,8 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    >
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="vertical"
@@ -11,144 +12,124 @@
         android:padding="10dp">
 
         <TextView
-            android:id="@+id/tv_nome_conta"
+            android:id="@+id/tv_nome_cartao"
             android:text="Nome"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             />
 
         <EditText
-            android:id="@+id/et_nome_conta"
+            android:id="@+id/et_nome_cartao"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             />
 
         <TextView
-            android:id="@+id/tv_tipo_conta"
+            android:id="@+id/tv_ult_num_cartao"
+            android:text="Últimos 4 números"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+
+        <EditText
+            android:id="@+id/et_ult_num_cartao"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+
+        <TextView
+            android:id="@+id/tv_tipo_cartao"
             android:text="Tipo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             />
 
-        <RadioGroup
+        <Spinner
+            android:id="@+id/sp_tipo_cartao"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <RadioButton
-                android:text="Receita"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <RadioButton
-                android:text="Despesa"
-                android:layout_marginLeft="10dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-        </RadioGroup>
+            />
 
         <TextView
-            android:id="@+id/tv_financa_conta"
-            android:text="Finança"
+            android:id="@+id/tv_bandeira_cartao"
+            android:text="Bandeira"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             />
 
         <Spinner
-            android:id="@+id/sp_financa_conta"
+            android:id="@+id/sp_bandeira_cartao"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             />
 
         <TextView
-            android:id="@+id/tv_cartao_conta"
-            android:text="Cartão"
+            android:id="@+id/tv_conta_cartao"
+            android:text="Conta"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             />
 
         <Spinner
-            android:id="@+id/sp_cartao_conta"
+            android:id="@+id/sp_conta_cartao"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             />
 
         <TextView
-            android:id="@+id/tv_periodicidade_conta"
-            android:text="Periodicidade"
+            android:id="@+id/tv_dt_validade_cartao"
+            android:text="Validade"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            />
-
-        <Spinner
-            android:id="@+id/sp_periodicidade_conta"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            />
-
-        <TextView
-            android:id="@+id/tv_qtd_parcelas_conta"
-            android:text="Quantidade de Parcelas"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             />
 
         <EditText
-            android:id="@+id/et_qtd_parcelas_conta"
+            android:id="@+id/et_dt_validade_cartao"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             />
 
         <TextView
-            android:id="@+id/tv_valor_parcela_conta"
-            android:text="Valor Parcela"
+            android:id="@+id/tv_val_limite_cartao"
+            android:text="Valor Limite"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             />
 
         <EditText
-            android:id="@+id/et_valor_parcela_conta"
+            android:id="@+id/et_val_limite_cartao"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             />
 
         <TextView
-            android:id="@+id/tv_valor_total_conta"
-            android:text="Valor Total"
+            android:id="@+id/tv_val_utilizado_cartao"
+            android:text="Valor Limite"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             />
 
         <EditText
-            android:id="@+id/et_valor_total_conta"
+            android:id="@+id/et_val_utilizado_cartao"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             />
 
         <TextView
-            android:id="@+id/tv_data_vencimento_conta"
-            android:text="Data do Vencimento"
+            android:id="@+id/tv_val_disponível_cartao"
+            android:text="Valor Limite"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             />
 
         <EditText
-            android:id="@+id/et_data_vencimento_conta"
+            android:id="@+id/et_val_disponivel_cartao"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             />
-
-        <CheckBox
-            android:id="@+id/cb_debito_automatico_conta"
-            android:text="Debito Automático?"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -171,6 +152,5 @@
                 />
 
         </LinearLayout>
-
     </LinearLayout>
 </ScrollView>

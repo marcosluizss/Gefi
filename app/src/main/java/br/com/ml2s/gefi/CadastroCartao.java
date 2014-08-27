@@ -9,10 +9,10 @@ import android.view.ViewGroup;
 /**
  * Created by marcossantos on 21/08/2014.
  */
-public class CadastroConta extends Fragment {
+public class CadastroCartao extends Fragment {
 
-    public static CadastroConta init(){
-        return new CadastroConta();
+    public static CadastroCartao init(){
+        return new CadastroCartao();
     }
 
     @Override
@@ -22,7 +22,7 @@ public class CadastroConta extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-        View view = inflater.inflate(R.layout.fragment_minhas_contas,container, false);
+        View view = inflater.inflate(R.layout.fragment_meus_cartoes,container, false);
         return view;
     }
 

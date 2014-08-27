@@ -39,7 +39,6 @@ public class Menu extends Fragment {
         MenuList menuList = new MenuList();
         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.fl_menu_container, menuList);
-        transaction.addToBackStack(null);
         transaction.commit();
     }
 

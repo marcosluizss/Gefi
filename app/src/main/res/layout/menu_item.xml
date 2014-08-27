@@ -6,7 +6,6 @@
 
     <ImageView
         android:id="@+id/iv_menu_item"
-        android:src="@drawable/ic_launcher"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         />
@@ -27,7 +26,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:text="5"
         android:height="50dp"
         android:gravity="center_vertical"
         android:paddingRight="10dp"
