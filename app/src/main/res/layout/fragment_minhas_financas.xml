@@ -1,109 +1,114 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="10dp"
     >
 
-    <TextView
-        android:id="@+id/tv_nome_financa"
-        android:text="Nome"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        />
-
-    <EditText
-        android:id="@+id/et_nome_financa"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-    />
-
-    <TextView
-        android:id="@+id/tv_tipo_financa"
-        android:text="Tipo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        />
-
-    <Spinner
-        android:id="@+id/sp_tipo_financa"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        />
-
-    <TextView
-        android:id="@+id/tv_banco_cc_financa"
-        android:text="Banco"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        />
-
-    <Spinner
-        android:id="@+id/sp_banco_cc_financa"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-     />
-
-    <TextView
-        android:id="@+id/tv_agecia_cc_financa"
-        android:text="Agência"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        />
-
-    <EditText
-        android:id="@+id/ed_agencia_cc_financa"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-    />
-
-    <TextView
-    android:id="@+id/tv_numero_cc_conta"
-    android:text="Conta"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    />
-
-    <EditText
-        android:id="@+id/ed_numero_cc_conta"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        />
-
-    <TextView
-        android:id="@+id/tv_saldo_conta"
-        android:text="Saldo Inicial"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        />
-
-    <EditText
-        android:id="@+id/ed_saldo_conta"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center">
-
-        <Button
-            android:id="@+id/bt_salvar_conta"
-            android:text="Salvar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <Button
-            android:id="@+id/bt_cancelar_conta"
-            android:text="Cancelar"
+        <TextView
+            android:id="@+id/tv_nome_financa"
+            android:text="Nome"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/bt_salvar_conta"
             />
 
+        <EditText
+            android:id="@+id/et_nome_financa"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+        />
+
+        <TextView
+            android:id="@+id/tv_tipo_financa"
+            android:text="Tipo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            />
+
+        <Spinner
+            android:id="@+id/sp_tipo_financa"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+
+        <TextView
+            android:id="@+id/tv_banco_cc_financa"
+            android:text="Banco"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+
+        <Spinner
+            android:id="@+id/sp_banco_cc_financa"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+         />
+
+        <TextView
+            android:id="@+id/tv_agencia_cc_financa"
+            android:text="Agência"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+
+        <EditText
+            android:id="@+id/et_agencia_cc_financa"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+        />
+
+        <TextView
+        android:id="@+id/tv_numero_cc_conta_financa"
+        android:text="Conta"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+
+        <EditText
+            android:id="@+id/et_numero_cc_conta_financa"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+
+        <TextView
+            android:id="@+id/tv_val_saldo_inicial_financa"
+            android:text="Saldo Inicial"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+
+        <EditText
+            android:id="@+id/et_val_saldo_inicial_financa"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/bt_salvar_financa"
+                android:text="Salvar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <Button
+                android:id="@+id/bt_cancelar_financa"
+                android:text="Cancelar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+
+        </LinearLayout>
     </LinearLayout>
-</LinearLayout>
+</ScrollView>

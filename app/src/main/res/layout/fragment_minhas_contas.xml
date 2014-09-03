@@ -31,15 +31,18 @@
             />
 
         <RadioGroup
+            android:id="@+id/rg_tipo_conta"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
             <RadioButton
+                android:id="@+id/rb_conta_receita"
                 android:text="Receita"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
             <RadioButton
+                android:id="@+id/rb_conta_despesa"
                 android:text="Despesa"
                 android:layout_marginLeft="10dp"
                 android:layout_width="wrap_content"

@@ -2,6 +2,8 @@ package br.com.ml2s.gefi;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -16,9 +18,12 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by marcossantos on 22/08/2014.
@@ -27,19 +32,19 @@ public class FinancasList extends ListFragment implements DialogInterface.OnClic
 
     private FragmentManager fm;
     private FragmentTransaction ft;
-    private List<String> aList;
+
+    private List<Map<String, Object>> aFinancas;
     private AlertDialog dialogConfirmacao;
     private AdapterView.AdapterContextMenuInfo info;
     private int ItemSelecionado;
 
+    private DatabaseHelper helper;
+
+    private String financaId;
+
     public static FinancasList init() {
         return new FinancasList();
     }
-
-    String[] txtItem = new String[]{
-            "Nova Finança",
-            "NAN"
-    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -49,6 +54,9 @@ public class FinancasList extends ListFragment implements DialogInterface.OnClic
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_list_itens, container, false);
+
+        helper = new DatabaseHelper(getActivity());
+
         return view;
     }
 
@@ -56,13 +64,39 @@ public class FinancasList extends ListFragment implements DialogInterface.OnClic
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        aList = new ArrayList<String>();
+        aFinancas = new ArrayList<Map<String, Object>>();
+        Map<String, Object> botaoAdd = new HashMap<String, Object>();
+        botaoAdd.put("id","-1");
+        botaoAdd.put("nome","Nova Financa");
+        aFinancas.add(botaoAdd);
 
-        for (int i = 0; i < txtItem.length; i++) {
-            aList.add(txtItem[i]);
-        }
+        try {
+            SQLiteDatabase db = helper.getReadableDatabase();
+            Cursor cFinancas = db.rawQuery("Select _id, nome from financas", null);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity().getBaseContext(), android.R.layout.simple_list_item_1, aList);
+            cFinancas.moveToFirst();
+            int qtdRegistros = cFinancas.getCount();
+
+            for (int i = 0; i < qtdRegistros; i++) {
+
+                Map<String, Object> financa = new HashMap<String, Object>();
+                String id = cFinancas.getString(0);
+                String nome = cFinancas.getString(1);
+
+                financa.put("id", id);
+                financa.put("nome", nome);
+
+                aFinancas.add(financa);
+
+                cFinancas.moveToNext();
+            }
+            cFinancas.close();
+        }catch (Exception e){}
+
+        String[] de = {"nome"};
+        int[] para = {R.id.tv_menu_texto};
+
+        SimpleAdapter adapter = new SimpleAdapter(getActivity().getBaseContext(), aFinancas,R.layout.menu_item, de, para);
         setListAdapter(adapter);
 
         registerForContextMenu(getListView());
@@ -75,20 +109,16 @@ public class FinancasList extends ListFragment implements DialogInterface.OnClic
     @Override
     public void onListItemClick(ListView lvMenu, View view, int posicao, long id) {
 
-        switch (posicao) {
+        financaId = (String) aFinancas.get(posicao).get("id");
+        Bundle data = new Bundle();
+        data.putString("id", financaId);
 
-            case 0:
-                FrameLayout frame = (FrameLayout) getActivity().findViewById(R.id.fl_menu_container);
-                frame.removeAllViews();
-
-                CadastroFinanca newFragment = new CadastroFinanca();
-                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.fl_menu_container, newFragment);
-                transaction.addToBackStack(null);
-                transaction.commit();
-
-        }
-
+        CadastroFinanca newFragment = new CadastroFinanca();
+        newFragment.setArguments(data);
+        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.fl_menu_container, newFragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
 
     }
 
@@ -131,13 +161,21 @@ public class FinancasList extends ListFragment implements DialogInterface.OnClic
                 dialogConfirmacao.show();
                 break;
             case DialogInterface.BUTTON_POSITIVE:
-                aList.remove(ItemSelecionado);
+                financaId = (String) aFinancas.get(ItemSelecionado).get("id");
+                aFinancas.remove(ItemSelecionado);
+                removerFinanca(financaId);
                 getListView().invalidateViews();
                 break;
             case DialogInterface.BUTTON_NEGATIVE:
                 dialogConfirmacao.dismiss();
                 break;
         }
+    }
+
+    private void removerFinanca(String id){
+        SQLiteDatabase db = helper.getWritableDatabase();
+        String[] where = new String[]{ id };
+        db.delete("financas","_id = ? ", where);
     }
 
 }

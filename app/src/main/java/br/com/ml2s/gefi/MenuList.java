@@ -65,7 +65,6 @@ public class MenuList extends ListFragment {
     public void onActivityCreated(Bundle savedInstanceState){
         super.onActivityCreated(savedInstanceState);
 
-
         List<HashMap<String,String>> aList = new ArrayList<HashMap<String,String>>();
 
         for (int i=0;i<txtItem.length;i++){
@@ -112,6 +111,7 @@ public class MenuList extends ListFragment {
         transaction.replace(R.id.fl_menu_container, newFragment);
         transaction.addToBackStack(null);
         transaction.commit();
+
     }
 
 }

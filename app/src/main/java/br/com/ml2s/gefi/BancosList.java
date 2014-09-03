@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
@@ -19,6 +20,7 @@ import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,6 +40,8 @@ public class BancosList extends ListFragment implements DialogInterface.OnClickL
     private AlertDialog dialogConfirmacao;
     private AdapterView.AdapterContextMenuInfo info;
     private int ItemSelecionado;
+
+    private List<Fragment> aFrag;
 
     private DatabaseHelper helper;
 

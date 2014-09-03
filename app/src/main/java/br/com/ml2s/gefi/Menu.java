@@ -6,6 +6,9 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
+import java.util.List;
 
 /**
  * Created by marcossantos on 15/08/2014.
@@ -40,6 +43,7 @@ public class Menu extends Fragment {
         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.fl_menu_container, menuList);
         transaction.commit();
+
     }
 
 }

@@ -66,8 +66,8 @@
             />
 
         <TextView
-            android:id="@+id/tv_conta_cartao"
-            android:text="Conta"
+            android:id="@+id/tv_conta_coorente_cartao"
+            android:text="Conta Corrente"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
@@ -107,7 +107,7 @@
 
         <TextView
             android:id="@+id/tv_val_utilizado_cartao"
-            android:text="Valor Limite"
+            android:text="Valor Utilizado"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             />
@@ -120,7 +120,7 @@
 
         <TextView
             android:id="@+id/tv_val_disponível_cartao"
-            android:text="Valor Limite"
+            android:text="Valor Disponível"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             />
@@ -138,13 +138,13 @@
             android:gravity="center">
 
             <Button
-                android:id="@+id/bt_salvar_conta"
+                android:id="@+id/bt_salvar_cartao"
                 android:text="Salvar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
             <Button
-                android:id="@+id/bt_cancelar_conta"
+                android:id="@+id/bt_cancelar_cartao"
                 android:text="Cancelar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

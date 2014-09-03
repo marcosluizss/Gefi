@@ -2,6 +2,8 @@ package br.com.ml2s.gefi;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -16,9 +18,12 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by marcossantos on 22/08/2014.
@@ -27,19 +32,19 @@ public class ContasList extends ListFragment implements DialogInterface.OnClickL
 
     private FragmentManager fm;
     private FragmentTransaction ft;
-    private List<String> aList;
+
+    private List<Map<String, Object>> aContas;
     private AlertDialog dialogConfirmacao;
     private AdapterView.AdapterContextMenuInfo info;
     private int ItemSelecionado;
 
+    private DatabaseHelper helper;
+
+    private String contaId;
+
     public static ContasList init() {
         return new ContasList();
     }
-
-    String[] txtItem = new String[]{
-            "Nova Conta",
-            "NAN"
-    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -49,6 +54,9 @@ public class ContasList extends ListFragment implements DialogInterface.OnClickL
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_list_itens, container, false);
+
+        helper = new DatabaseHelper(getActivity());
+
         return view;
     }
 
@@ -56,13 +64,38 @@ public class ContasList extends ListFragment implements DialogInterface.OnClickL
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        aList = new ArrayList<String>();
+        aContas = new ArrayList<Map<String, Object>>();
+        Map<String, Object> botaoAdd = new HashMap<String, Object>();
+        botaoAdd.put("id","-1");
+        botaoAdd.put("nome","Nova Conta");
+        aContas.add(botaoAdd);
 
-        for (int i = 0; i < txtItem.length; i++) {
-            aList.add(txtItem[i]);
-        }
+        try {
+            SQLiteDatabase db = helper.getReadableDatabase();
+            Cursor cContas = db.rawQuery("Select _id, nome from contas", null);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity().getBaseContext(), android.R.layout.simple_list_item_1, aList);
+            cContas.moveToFirst();
+            int qtdRegistros = cContas.getCount();
+            for (int i = 0; i < qtdRegistros; i++) {
+
+                Map<String, Object> conta = new HashMap<String, Object>();
+                String id = cContas.getString(0);
+                String nome = cContas.getString(1);
+
+                conta.put("id", id);
+                conta.put("nome", nome);
+
+                aContas.add(conta);
+
+                cContas.moveToNext();
+            }
+            cContas.close();
+        }catch (Exception e){}
+
+        String[] de = {"nome"};
+        int[] para = {R.id.tv_menu_texto};
+
+        SimpleAdapter adapter = new SimpleAdapter(getActivity().getBaseContext(), aContas ,R.layout.menu_item, de, para);
         setListAdapter(adapter);
 
         registerForContextMenu(getListView());
@@ -75,21 +108,16 @@ public class ContasList extends ListFragment implements DialogInterface.OnClickL
     @Override
     public void onListItemClick(ListView lvMenu, View view, int posicao, long id) {
 
-        switch (posicao) {
+        contaId = (String) aContas.get(posicao).get("id");
+        Bundle data = new Bundle();
+        data.putString("id", contaId);
 
-            case 0:
-                FrameLayout frame = (FrameLayout) getActivity().findViewById(R.id.fl_menu_container);
-                frame.removeAllViews();
-
-                CadastroConta newFragment = new CadastroConta();
-                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.fl_menu_container, newFragment);
-                transaction.addToBackStack(null);
-                transaction.commit();
-
-        }
-
-
+        CadastroConta newFragment = new CadastroConta();
+        newFragment.setArguments(data);
+        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.fl_menu_container, newFragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 
     @Override
@@ -131,13 +159,21 @@ public class ContasList extends ListFragment implements DialogInterface.OnClickL
                 dialogConfirmacao.show();
                 break;
             case DialogInterface.BUTTON_POSITIVE:
-                aList.remove(ItemSelecionado);
+                contaId = (String) aContas.get(ItemSelecionado).get("id");
+                aContas.remove(ItemSelecionado);
+                removerConta(contaId);
                 getListView().invalidateViews();
                 break;
             case DialogInterface.BUTTON_NEGATIVE:
                 dialogConfirmacao.dismiss();
                 break;
         }
+    }
+
+    private void removerConta(String id){
+        SQLiteDatabase db = helper.getWritableDatabase();
+        String[] where = new String[]{ id };
+        db.delete("contas","_id = ? ", where);
     }
 
 }

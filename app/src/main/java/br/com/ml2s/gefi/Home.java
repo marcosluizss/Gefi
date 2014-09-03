@@ -9,6 +9,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.widget.Toast;
+
+import java.util.List;
 
 /**
  * Created by marcossantos on 15/08/2014.
@@ -88,6 +91,7 @@ public class Home extends FragmentActivity {
         actionBar.addTab(tab);
         tab = actionBar.newTab().setText("Menu").setTabListener(tabListener);
         actionBar.addTab(tab);
+
     }
 
 }

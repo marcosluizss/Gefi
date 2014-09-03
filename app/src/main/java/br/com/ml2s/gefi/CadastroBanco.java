@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.Toast;
+
+import java.util.List;
 
 /**
  * Created by marcossantos on 21/08/2014.
@@ -77,6 +80,7 @@ public class CadastroBanco extends Fragment {
 
     @Override
     public void onDestroy() {
+        helper.close();
         super.onDestroy();
     }
 
@@ -109,18 +113,10 @@ public class CadastroBanco extends Fragment {
         codBanco.setText(cursor.getString(0));
         nomeBanco.setText(cursor.getString(1));
         cursor.close();
-
     }
 
     public void voltaTela(){
-        FrameLayout frame = (FrameLayout) getActivity().findViewById(R.id.fl_menu_container);
-        frame.removeAllViews();
-
-        BancosList newFragment = new BancosList();
-        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.fl_menu_container, newFragment);
-        transaction.addToBackStack(null);
-        transaction.commit();
+        getActivity().onBackPressed();
     }
 
 }
