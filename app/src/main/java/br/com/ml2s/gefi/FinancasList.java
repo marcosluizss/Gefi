@@ -2,10 +2,7 @@ package br.com.ml2s.gefi;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
 import android.view.ContextMenu;
@@ -15,8 +12,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
@@ -30,12 +25,8 @@ import java.util.Map;
  */
 public class FinancasList extends ListFragment implements DialogInterface.OnClickListener {
 
-    private FragmentManager fm;
-    private FragmentTransaction ft;
-
     private List<Map<String, Object>> aFinancas;
     private AlertDialog dialogConfirmacao;
-    private AdapterView.AdapterContextMenuInfo info;
     private int ItemSelecionado;
 
     private DatabaseHelper helper;
@@ -66,34 +57,14 @@ public class FinancasList extends ListFragment implements DialogInterface.OnClic
 
         aFinancas = new ArrayList<Map<String, Object>>();
         Map<String, Object> botaoAdd = new HashMap<String, Object>();
-        botaoAdd.put("id","-1");
-        botaoAdd.put("nome","Nova Financa");
+        botaoAdd.put(DatabaseHelper.KEY_ID,DatabaseHelper.VALUE_ID_NULL);
+        botaoAdd.put(DatabaseHelper.KEY_NOME,getText(R.string.nova_financa));
         aFinancas.add(botaoAdd);
 
-        try {
-            SQLiteDatabase db = helper.getReadableDatabase();
-            Cursor cFinancas = db.rawQuery("Select _id, nome from financas", null);
+        DataSourceTools db = new DataSourceTools(helper);
+        aFinancas.addAll(db.findAll(DatabaseHelper.TABLE_FINANCA, null));
 
-            cFinancas.moveToFirst();
-            int qtdRegistros = cFinancas.getCount();
-
-            for (int i = 0; i < qtdRegistros; i++) {
-
-                Map<String, Object> financa = new HashMap<String, Object>();
-                String id = cFinancas.getString(0);
-                String nome = cFinancas.getString(1);
-
-                financa.put("id", id);
-                financa.put("nome", nome);
-
-                aFinancas.add(financa);
-
-                cFinancas.moveToNext();
-            }
-            cFinancas.close();
-        }catch (Exception e){}
-
-        String[] de = {"nome"};
+        String[] de = {DatabaseHelper.KEY_NOME};
         int[] para = {R.id.tv_menu_texto};
 
         SimpleAdapter adapter = new SimpleAdapter(getActivity().getBaseContext(), aFinancas,R.layout.menu_item, de, para);
@@ -105,13 +76,12 @@ public class FinancasList extends ListFragment implements DialogInterface.OnClic
 
     }
 
-
     @Override
     public void onListItemClick(ListView lvMenu, View view, int posicao, long id) {
 
-        financaId = (String) aFinancas.get(posicao).get("id");
+        financaId = aFinancas.get(posicao).get(DatabaseHelper.KEY_ID).toString();
         Bundle data = new Bundle();
-        data.putString("id", financaId);
+        data.putString(DatabaseHelper.KEY_ID, financaId);
 
         CadastroFinanca newFragment = new CadastroFinanca();
         newFragment.setArguments(data);
@@ -135,7 +105,6 @@ public class FinancasList extends ListFragment implements DialogInterface.OnClic
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-        info = null;
         ItemSelecionado = -1;
         if (item.getItemId() == R.id.remover) {
             AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
@@ -161,10 +130,8 @@ public class FinancasList extends ListFragment implements DialogInterface.OnClic
                 dialogConfirmacao.show();
                 break;
             case DialogInterface.BUTTON_POSITIVE:
-                financaId = (String) aFinancas.get(ItemSelecionado).get("id");
-                aFinancas.remove(ItemSelecionado);
-                removerFinanca(financaId);
-                getListView().invalidateViews();
+                financaId = aFinancas.get(ItemSelecionado).get(DatabaseHelper.KEY_ID).toString();
+                remover(financaId);
                 break;
             case DialogInterface.BUTTON_NEGATIVE:
                 dialogConfirmacao.dismiss();
@@ -172,10 +139,14 @@ public class FinancasList extends ListFragment implements DialogInterface.OnClic
         }
     }
 
-    private void removerFinanca(String id){
-        SQLiteDatabase db = helper.getWritableDatabase();
-        String[] where = new String[]{ id };
-        db.delete("financas","_id = ? ", where);
+    private void remover(String id){
+        int result;
+        DataSourceTools db = new DataSourceTools(helper);
+        result = db.delete(DatabaseHelper.TABLE_FINANCA,id);
+        if(result == R.string.salvar_sucesso) {
+            aFinancas.remove(ItemSelecionado);
+            getListView().invalidateViews();
+        }
     }
 
 }

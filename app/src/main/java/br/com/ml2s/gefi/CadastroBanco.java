@@ -1,22 +1,16 @@
 package br.com.ml2s.gefi;
 
 import android.content.ContentValues;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.Toast;
 
-import java.util.List;
+import java.util.Map;
 
 /**
  * Created by marcossantos on 21/08/2014.
@@ -27,6 +21,7 @@ public class CadastroBanco extends Fragment {
     private Button btSalvar, btCancelar;
     private String bancoId;
     private DatabaseHelper helper;
+    private int msgId;
 
     public static CadastroBanco init(){
         return new CadastroBanco();
@@ -43,7 +38,7 @@ public class CadastroBanco extends Fragment {
 
         helper = new DatabaseHelper(getActivity());
         Bundle extras = getArguments();
-        bancoId = extras.getString("id");
+        bancoId = extras.getString(DatabaseHelper.KEY_ID);
 
         return view;
     }
@@ -55,13 +50,15 @@ public class CadastroBanco extends Fragment {
         codBanco = (EditText)getActivity().findViewById(R.id.et_codigo_banco);
         nomeBanco = (EditText)getActivity().findViewById(R.id.et_nome_banco);
 
+        codBanco.addTextChangedListener(Mask.number(codBanco));
+
         btSalvar = (Button)getActivity().findViewById(R.id.bt_salvar_banco);
         btCancelar = (Button)getActivity().findViewById(R.id.bt_cancelar_banco);
 
         btSalvar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                salvarBanco(view);
+                salvar(view);
             }
         });
 
@@ -72,47 +69,39 @@ public class CadastroBanco extends Fragment {
             }
         });
 
-        if(bancoId != "-1"){
+        if(bancoId != DatabaseHelper.VALUE_ID_NULL){
             preparaEdicao();
         }
 
     }
 
-    @Override
-    public void onDestroy() {
-        helper.close();
-        super.onDestroy();
-    }
-
-    public void salvarBanco(View view){
-        SQLiteDatabase db = helper.getWritableDatabase();
+    public void salvar(View view){
+        DataSourceTools db = new DataSourceTools(helper);
 
         ContentValues values = new ContentValues();
-        values.put("codigo",codBanco.getText().toString());
-        values.put("nome", nomeBanco.getText().toString());
+        values.put(DatabaseHelper.KEY_CODIGO,codBanco.getText().toString());
+        values.put(DatabaseHelper.KEY_NOME, nomeBanco.getText().toString());
 
-        long result = -1;
-        if(bancoId == "-1") {
-            result = db.insert("bancos", null, values);
+        if(bancoId == DatabaseHelper.VALUE_ID_NULL) {
+            msgId = db.save(DatabaseHelper.TABLE_BANCO, values);
         }else{
-            result = db.update("bancos", values, "_id = ?", new String[]{ bancoId });
+            msgId = db.update(DatabaseHelper.TABLE_BANCO, values, bancoId);
         }
 
-        if(result != -1){
-            Toast.makeText(getActivity(),"Registo salvo",Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(),msgId,Toast.LENGTH_SHORT).show();
+        if(msgId == R.string.salvar_sucesso){
             voltaTela();
-        }else{
-            Toast.makeText(getActivity(),"Erro ao salvar registro",Toast.LENGTH_SHORT).show();
         }
     }
 
     public void preparaEdicao(){
-        SQLiteDatabase db = helper.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT codigo, nome FROM bancos WHERE _id = ?", new String[]{ bancoId });
-        cursor.moveToFirst();
-        codBanco.setText(cursor.getString(0));
-        nomeBanco.setText(cursor.getString(1));
-        cursor.close();
+        // bancoId;
+        DataSourceTools db = new DataSourceTools(helper);
+
+        Map<String,Object> banco = db.find(DatabaseHelper.TABLE_BANCO,null,bancoId);
+        codBanco.setText(banco.get(DatabaseHelper.KEY_CODIGO).toString());
+        nomeBanco.setText(banco.get(DatabaseHelper.KEY_NOME).toString());
+
     }
 
     public void voltaTela(){

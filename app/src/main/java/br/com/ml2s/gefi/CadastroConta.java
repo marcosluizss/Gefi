@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.SimpleAdapter;
 import android.widget.Spinner;
@@ -310,7 +309,9 @@ public class CadastroConta extends Fragment {
         tipoConta.check(cursor.getInt(1)==1?R.id.rb_conta_receita:R.id.rb_conta_despesa);
 
         try {
-            periodicidade.setSelection(Integer.parseInt((String) aPeriodicidade.get(cursor.getInt(2)).get("id")));
+            periodicidade.setSelection(
+                    Integer.parseInt((String) aPeriodicidade.get(cursor.getInt(2)).get("id")))
+            ;
         }catch (Exception e){}
         qtdParcelas.setText(cursor.getString(3));
         valTotal.setText(cursor.getString(4));

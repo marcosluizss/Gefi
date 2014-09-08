@@ -4,11 +4,11 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="10dp">
+    android:padding="@dimen/padding_page">
 
     <TextView
         android:id="@+id/tv_codigo_banco"
-        android:text="Códígo"
+        android:text="@string/codigo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         />
@@ -17,11 +17,15 @@
         android:id="@+id/et_codigo_banco"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:inputType="phone"
+        android:numeric="integer"
+        android:maxLength="@string/length_cod_banco"
+        android:nextFocusDown="@+id/et_nome_banco"
         />
 
     <TextView
         android:id="@+id/tv_nome_banco"
-        android:text="Nome"
+        android:text="@string/nome"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         />
@@ -30,6 +34,8 @@
         android:id="@+id/et_nome_banco"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:nextFocusDown="@+id/bt_salvar_banco"
+        android:singleLine="true"
         />
 
     <LinearLayout
@@ -40,16 +46,15 @@
 
         <Button
             android:id="@+id/bt_salvar_banco"
-            android:text="Salvar"
+            android:text="@string/salvar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
         <Button
             android:id="@+id/bt_cancelar_banco"
-            android:text="Cancelar"
+            android:text="@string/cancelar"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            />
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
 

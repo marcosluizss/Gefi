@@ -14,5 +14,25 @@
     <string name="sim">Sim</string>
     <string name="nao">Não</string>
 
+    <string name="salvar">Salvar</string>
+    <string name="cancelar">Cancelar</string>
+
+    <string name="valor_inválido">Valor inválido para o campo.</string>
+    <string name="salvar_sucesso">Registro salvo com sucesso.</string>
+    <string name="salvar_erro">Erro ao salvar o registro.</string>
+
+    <string name="length_cod_banco">4</string>
+
+    <string name="codigo">Código</string>
+    <string name="nome">Nome</string>
+    <string name="banco">Banco</string>
+    <string name="tipo">Tipo</string>
+    <string name="agencia">Agência</string>
+    <string name="conta">Conta</string>
+    <string name="saldo_inicial">Saldo Inicial</string>
+
+    <string name="novo_banco">Novo Banco</string>
+    <string name="nova_financa">Novo Finança</string>
+    <string name="selecione"> Selecione </string>
 
 </resources>

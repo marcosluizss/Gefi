@@ -8,12 +8,11 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="10dp"
-    >
+    android:padding="@dimen/padding_page">
 
         <TextView
             android:id="@+id/tv_nome_financa"
-            android:text="Nome"
+            android:text="@string/nome"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             />
@@ -22,25 +21,28 @@
             android:id="@+id/et_nome_financa"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:nextFocusDown="@+id/sp_tipo_financa"
+            android:singleLine="true"
         />
 
         <TextView
             android:id="@+id/tv_tipo_financa"
-            android:text="Tipo"
+            android:text="@string/tipo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="@dimen/campos_margin_top"
             />
 
         <Spinner
             android:id="@+id/sp_tipo_financa"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:nextFocusDown="@+id/sp_banco_cc_financa"
             />
 
         <TextView
             android:id="@+id/tv_banco_cc_financa"
-            android:text="Banco"
+            android:text="@string/banco"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             />
@@ -49,11 +51,12 @@
             android:id="@+id/sp_banco_cc_financa"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:nextFocusDown="@+id/et_agencia_cc_financa"
          />
 
         <TextView
             android:id="@+id/tv_agencia_cc_financa"
-            android:text="Agência"
+            android:text="@string/agencia"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             />
@@ -62,24 +65,28 @@
             android:id="@+id/et_agencia_cc_financa"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:nextFocusDown="@+id/et_numero_cc_conta_financa"
         />
 
         <TextView
-        android:id="@+id/tv_numero_cc_conta_financa"
-        android:text="Conta"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        />
+            android:id="@+id/tv_numero_cc_conta_financa"
+            android:text="@string/conta"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
 
         <EditText
             android:id="@+id/et_numero_cc_conta_financa"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:nextFocusDown="@+id/et_val_saldo_inicial_financa"
             />
 
         <TextView
             android:id="@+id/tv_val_saldo_inicial_financa"
-            android:text="Saldo Inicial"
+            android:text="@string/saldo_inicial"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             />
@@ -88,6 +95,9 @@
             android:id="@+id/et_val_saldo_inicial_financa"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:nextFocusDown="@+id/bt_salvar_financa"
+            android:singleLine="true"
+            android:inputType="numberDecimal"
             />
 
         <LinearLayout
@@ -98,13 +108,13 @@
 
             <Button
                 android:id="@+id/bt_salvar_financa"
-                android:text="Salvar"
+                android:text="@string/salvar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
             <Button
                 android:id="@+id/bt_cancelar_financa"
-                android:text="Cancelar"
+                android:text="@string/cancelar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 />
