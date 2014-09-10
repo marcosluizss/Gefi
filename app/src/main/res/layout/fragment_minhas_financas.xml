@@ -67,6 +67,7 @@
             android:layout_height="wrap_content"
             android:singleLine="true"
             android:nextFocusDown="@+id/et_numero_cc_conta_financa"
+
         />
 
         <TextView

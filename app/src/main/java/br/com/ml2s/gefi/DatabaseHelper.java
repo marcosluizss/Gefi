@@ -17,6 +17,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TAG = "DATABASE";
 
     public static final String VALUE_ID_NULL = "-1";
+    public static final String VALUE_CONTA_CORRENTE = "CONTA CORRENTE";
+    public static final int VALUE_RECEITA = 1;
+    public static final int VALUE_DESPESA = 2;
+    public static final int VALUE_SIM = 1;
+    public static final int VALUE_NAO = 0;
 
     // tabelas
     public static final String TABLE_BANCO = "bancos";

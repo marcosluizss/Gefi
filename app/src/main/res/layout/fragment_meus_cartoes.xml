@@ -8,12 +8,12 @@
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:padding="10dp">
 
         <TextView
             android:id="@+id/tv_nome_cartao"
-            android:text="Nome"
+            android:text="@string/nome"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             />
@@ -22,11 +22,13 @@
             android:id="@+id/et_nome_cartao"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:inputType="text"
             />
 
         <TextView
             android:id="@+id/tv_ult_num_cartao"
-            android:text="Últimos 4 números"
+            android:text="@string/ultimos_4_num"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             />
@@ -35,11 +37,14 @@
             android:id="@+id/et_ult_num_cartao"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:maxLength="4"
+            android:singleLine="true"
+            android:inputType="number"
             />
 
         <TextView
             android:id="@+id/tv_tipo_cartao"
-            android:text="Tipo"
+            android:text="@string/tipo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
@@ -53,7 +58,7 @@
 
         <TextView
             android:id="@+id/tv_bandeira_cartao"
-            android:text="Bandeira"
+            android:text="@string/bandeira"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
@@ -67,7 +72,7 @@
 
         <TextView
             android:id="@+id/tv_conta_coorente_cartao"
-            android:text="Conta Corrente"
+            android:text="@string/conta_corrente"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
@@ -81,7 +86,7 @@
 
         <TextView
             android:id="@+id/tv_dt_validade_cartao"
-            android:text="Validade"
+            android:text="@string/data_validade"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             />
@@ -90,11 +95,12 @@
             android:id="@+id/et_dt_validade_cartao"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:singleLine="true"
             />
 
         <TextView
             android:id="@+id/tv_val_limite_cartao"
-            android:text="Valor Limite"
+            android:text="@string/val_limite"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             />
@@ -103,11 +109,12 @@
             android:id="@+id/et_val_limite_cartao"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:singleLine="true"
             />
 
         <TextView
             android:id="@+id/tv_val_utilizado_cartao"
-            android:text="Valor Utilizado"
+            android:text="@string/val_limite_utl"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             />
@@ -116,11 +123,12 @@
             android:id="@+id/et_val_utilizado_cartao"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:singleLine="true"
             />
 
         <TextView
             android:id="@+id/tv_val_disponível_cartao"
-            android:text="Valor Disponível"
+            android:text="@string/val_limite_dis"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             />
@@ -129,6 +137,7 @@
             android:id="@+id/et_val_disponivel_cartao"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:singleLine="true"
             />
 
         <LinearLayout
@@ -139,13 +148,13 @@
 
             <Button
                 android:id="@+id/bt_salvar_cartao"
-                android:text="Salvar"
+                android:text="@string/salvar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
             <Button
                 android:id="@+id/bt_cancelar_cartao"
-                android:text="Cancelar"
+                android:text="@string/cancelar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@+id/bt_salvar_conta"

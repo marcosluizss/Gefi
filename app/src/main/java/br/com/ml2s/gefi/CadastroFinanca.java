@@ -2,12 +2,12 @@ package br.com.ml2s.gefi;
 
 import android.content.ContentValues;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.SimpleAdapter;
@@ -29,9 +29,10 @@ public class CadastroFinanca extends Fragment {
     private Map<String, Object> item, result;
 
     private EditText nome,codAgencia,numContaCorrente,valSaldoInicial;
+    private TextView tvBanco, tvAgencia, tvContaCorrente;
     private Spinner banco,tipoFinanca;
     private Button btSalvar, btCancelar;
-    private String financaId;
+    private String financaId = "-1";
     private int msgId;
 
     private DatabaseHelper helper;
@@ -62,6 +63,7 @@ public class CadastroFinanca extends Fragment {
 
         result = new HashMap<String, Object>();
 
+        tvBanco = (TextView)getActivity().findViewById(R.id.tv_banco_cc_financa);
         banco = (Spinner) getActivity().findViewById(R.id.sp_banco_cc_financa);
         result = getAdapterSpinner(DatabaseHelper.TABLE_BANCO);
         banco.setAdapter((SimpleAdapter)result.get("adapter"));
@@ -75,12 +77,41 @@ public class CadastroFinanca extends Fragment {
         result.clear();
 
         nome = (EditText)getActivity().findViewById(R.id.et_nome_financa);
+
         codAgencia = (EditText)getActivity().findViewById(R.id.et_agencia_cc_financa);
+        tvAgencia = (TextView)getActivity().findViewById(R.id.tv_agencia_cc_financa);
         numContaCorrente = (EditText)getActivity().findViewById(R.id.et_numero_cc_conta_financa);
+        tvContaCorrente = (TextView)getActivity().findViewById(R.id.tv_numero_cc_conta_financa);
         valSaldoInicial = (EditText)getActivity().findViewById(R.id.et_val_saldo_inicial_financa);
 
         btSalvar = (Button)getActivity().findViewById(R.id.bt_salvar_financa);
         btCancelar = (Button)getActivity().findViewById(R.id.bt_cancelar_financa);
+
+        tipoFinanca.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            int indVisibilidade;
+
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long id) {
+                indVisibilidade = View.GONE;
+
+                if ( aTiposFinanca.get(pos).get(DatabaseHelper.KEY_NOME).toString().toUpperCase().equals(DatabaseHelper.VALUE_CONTA_CORRENTE) ){
+                    indVisibilidade = View.VISIBLE;
+                }
+
+                codAgencia.setVisibility(indVisibilidade);
+                tvAgencia.setVisibility(indVisibilidade);
+                numContaCorrente.setVisibility(indVisibilidade);
+                tvContaCorrente.setVisibility(indVisibilidade);
+                tvBanco.setVisibility(indVisibilidade);
+                banco.setVisibility(indVisibilidade);
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
 
         btSalvar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,13 +140,16 @@ public class CadastroFinanca extends Fragment {
         values.put(DatabaseHelper.KEY_NOME,nome.getText().toString());
 
         values.put(DatabaseHelper.KEY_TIPO_FINANCA_ID, aTiposFinanca.get(tipoFinanca.getSelectedItemPosition()).get(DatabaseHelper.KEY_ID).toString());
-        values.put(DatabaseHelper.KEY_BANCO_ID, aBancos.get(banco.getSelectedItemPosition()).get(DatabaseHelper.KEY_ID).toString());
-        values.put(DatabaseHelper.KEY_COD_AGENCIA,codAgencia.getText().toString());
-        values.put(DatabaseHelper.KEY_NUM_CONTA_CORRENTE,numContaCorrente.getText().toString());
+
+        if ( aTiposFinanca.get(tipoFinanca.getSelectedItemPosition()).get(DatabaseHelper.KEY_NOME).toString().toUpperCase().equals(DatabaseHelper.VALUE_CONTA_CORRENTE) ){
+            values.put(DatabaseHelper.KEY_BANCO_ID, aBancos.get(banco.getSelectedItemPosition()).get(DatabaseHelper.KEY_ID).toString());
+            values.put(DatabaseHelper.KEY_COD_AGENCIA,codAgencia.getText().toString());
+            values.put(DatabaseHelper.KEY_NUM_CONTA_CORRENTE,numContaCorrente.getText().toString());
+        }
+
         values.put(DatabaseHelper.KEY_VAL_SALDO_INICIAL,valSaldoInicial.getText().toString());
 
-        long result = -1;
-        if(financaId == DatabaseHelper.VALUE_ID_NULL) {
+        if(financaId.equals(DatabaseHelper.VALUE_ID_NULL)) {
             msgId = db.save(DatabaseHelper.TABLE_FINANCA, values);
         }else{
             msgId = db.update(DatabaseHelper.TABLE_FINANCA, values, financaId);
@@ -131,8 +165,6 @@ public class CadastroFinanca extends Fragment {
         DataSourceTools db = new DataSourceTools(helper);
         Map<String,Object> financa = db.find(DatabaseHelper.TABLE_FINANCA,null,financaId);
 
-        Log.w("financa",financa.toString());
-
         nome.setText(financa.get(DatabaseHelper.KEY_NOME).toString());
         tipoFinanca.setSelection(getPosition(aTiposFinanca,financa.get(DatabaseHelper.KEY_TIPO_FINANCA_ID).toString()));
         banco.setSelection(getPosition(aBancos, financa.get(DatabaseHelper.KEY_BANCO_ID).toString()));
@@ -146,7 +178,7 @@ public class CadastroFinanca extends Fragment {
         int count;
         count = aItens.size();
         for(int i=1;i<count;i++){
-            if( aItens.get(i).get(DatabaseHelper.KEY_ID).toString() == valor){
+            if( aItens.get(i).get(DatabaseHelper.KEY_ID).toString().equals(valor) ){
                 return i;
             }
         }

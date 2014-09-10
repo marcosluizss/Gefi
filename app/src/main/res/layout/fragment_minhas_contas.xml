@@ -7,12 +7,12 @@
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:padding="10dp">
 
         <TextView
             android:id="@+id/tv_nome_conta"
-            android:text="Nome"
+            android:text="@string/nome"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             />
@@ -21,11 +21,13 @@
             android:id="@+id/et_nome_conta"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:inputType="text"
             />
 
         <TextView
             android:id="@+id/tv_tipo_conta"
-            android:text="Tipo"
+            android:text="@string/tipo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             />
@@ -37,13 +39,13 @@
             android:orientation="horizontal">
             <RadioButton
                 android:id="@+id/rb_conta_receita"
-                android:text="Receita"
+                android:text="@string/receita"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
             <RadioButton
                 android:id="@+id/rb_conta_despesa"
-                android:text="Despesa"
+                android:text="@string/despesa"
                 android:layout_marginLeft="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
@@ -51,7 +53,7 @@
 
         <TextView
             android:id="@+id/tv_financa_conta"
-            android:text="Finança"
+            android:text="@string/financa"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
@@ -65,7 +67,7 @@
 
         <TextView
             android:id="@+id/tv_cartao_conta"
-            android:text="Cartão"
+            android:text="@string/cartao"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
@@ -79,7 +81,7 @@
 
         <TextView
             android:id="@+id/tv_periodicidade_conta"
-            android:text="Periodicidade"
+            android:text="@string/periodicidade"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
@@ -93,7 +95,7 @@
 
         <TextView
             android:id="@+id/tv_qtd_parcelas_conta"
-            android:text="Quantidade de Parcelas"
+            android:text="@string/qtd_parcelas"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
@@ -103,11 +105,13 @@
             android:id="@+id/et_qtd_parcelas_conta"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:inputType="number"
             />
 
         <TextView
             android:id="@+id/tv_valor_parcela_conta"
-            android:text="Valor Parcela"
+            android:text="@string/val_parcela"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
@@ -117,25 +121,30 @@
             android:id="@+id/et_valor_parcela_conta"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:inputType="numberDecimal"
             />
 
         <TextView
             android:id="@+id/tv_valor_total_conta"
-            android:text="Valor Total"
+            android:text="@string/val_total"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+
             />
 
         <EditText
             android:id="@+id/et_valor_total_conta"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:inputType="numberDecimal"
             />
 
         <TextView
             android:id="@+id/tv_data_vencimento_conta"
-            android:text="Data do Vencimento"
+            android:text="@string/data_vencimento"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
@@ -149,7 +158,7 @@
 
         <CheckBox
             android:id="@+id/cb_debito_automatico_conta"
-            android:text="Debito Automático?"
+            android:text="@string/debito_automatico"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -161,13 +170,13 @@
 
             <Button
                 android:id="@+id/bt_salvar_conta"
-                android:text="Salvar"
+                android:text="@string/salvar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
             <Button
                 android:id="@+id/bt_cancelar_conta"
-                android:text="Cancelar"
+                android:text="@string/cancelar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@+id/bt_salvar_conta"

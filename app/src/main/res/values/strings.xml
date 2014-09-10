@@ -30,9 +30,28 @@
     <string name="agencia">Agência</string>
     <string name="conta">Conta</string>
     <string name="saldo_inicial">Saldo Inicial</string>
+    <string name="ultimos_4_num">Últimos 4 Números</string>
+    <string name="bandeira">Bandeira</string>
+    <string name="conta_corrente">Conta Corrente</string>
+    <string name="data_validade">Data Validade</string>
+    <string name="val_limite">Valor Limite</string>
+    <string name="val_limite_utl">Valor Limite Utilizado</string>
+    <string name="val_limite_dis">Valor Limite Disponível</string>
+    <string name="receita">Receita</string>
+    <string name="despesa">Despesa</string>
+    <string name="financa">Finança</string>
+    <string name="cartao">Cartão</string>
+    <string name="periodicidade">Periodicidade</string>
+    <string name="qtd_parcelas">Quantidade de Parcelas</string>
+    <string name="val_parcela">Valor das Parcelas</string>
+    <string name="val_total">Valor das Total</string>
+    <string name="data_vencimento">Data Vencimento</string>
+    <string name="debito_automatico">Débito Automático?</string>
 
     <string name="novo_banco">Novo Banco</string>
     <string name="nova_financa">Novo Finança</string>
+    <string name="novo_cartao">Novo Cartão</string>
+    <string name="nova_conta">Nova Conta</string>
     <string name="selecione"> Selecione </string>
 
 </resources>

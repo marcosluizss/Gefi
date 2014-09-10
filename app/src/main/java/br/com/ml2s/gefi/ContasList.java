@@ -28,12 +28,8 @@ import java.util.Map;
  */
 public class ContasList extends ListFragment implements DialogInterface.OnClickListener {
 
-    private FragmentManager fm;
-    private FragmentTransaction ft;
-
     private List<Map<String, Object>> aContas;
     private AlertDialog dialogConfirmacao;
-    private AdapterView.AdapterContextMenuInfo info;
     private int ItemSelecionado;
 
     private DatabaseHelper helper;
@@ -64,33 +60,14 @@ public class ContasList extends ListFragment implements DialogInterface.OnClickL
 
         aContas = new ArrayList<Map<String, Object>>();
         Map<String, Object> botaoAdd = new HashMap<String, Object>();
-        botaoAdd.put("id","-1");
-        botaoAdd.put("nome","Nova Conta");
+        botaoAdd.put(DatabaseHelper.KEY_ID,DatabaseHelper.VALUE_ID_NULL);
+        botaoAdd.put(DatabaseHelper.KEY_NOME,getText(R.string.nova_conta));
         aContas.add(botaoAdd);
 
-        try {
-            SQLiteDatabase db = helper.getReadableDatabase();
-            Cursor cContas = db.rawQuery("Select _id, nome from contas", null);
+        DataSourceTools db = new DataSourceTools(helper);
+        aContas.addAll(db.findAll(DatabaseHelper.TABLE_CONTA, null));
 
-            cContas.moveToFirst();
-            int qtdRegistros = cContas.getCount();
-            for (int i = 0; i < qtdRegistros; i++) {
-
-                Map<String, Object> conta = new HashMap<String, Object>();
-                String id = cContas.getString(0);
-                String nome = cContas.getString(1);
-
-                conta.put("id", id);
-                conta.put("nome", nome);
-
-                aContas.add(conta);
-
-                cContas.moveToNext();
-            }
-            cContas.close();
-        }catch (Exception e){}
-
-        String[] de = {"nome"};
+        String[] de = {DatabaseHelper.KEY_NOME};
         int[] para = {R.id.tv_menu_texto};
 
         SimpleAdapter adapter = new SimpleAdapter(getActivity().getBaseContext(), aContas ,R.layout.menu_item, de, para);
@@ -102,13 +79,12 @@ public class ContasList extends ListFragment implements DialogInterface.OnClickL
 
     }
 
-
     @Override
     public void onListItemClick(ListView lvMenu, View view, int posicao, long id) {
 
-        contaId = (String) aContas.get(posicao).get("id");
+        contaId = aContas.get(posicao).get(DatabaseHelper.KEY_ID).toString();
         Bundle data = new Bundle();
-        data.putString("id", contaId);
+        data.putString(DatabaseHelper.KEY_ID, contaId);
 
         CadastroConta newFragment = new CadastroConta();
         newFragment.setArguments(data);
@@ -116,6 +92,7 @@ public class ContasList extends ListFragment implements DialogInterface.OnClickL
         transaction.replace(R.id.fl_menu_container, newFragment);
         transaction.addToBackStack(null);
         transaction.commit();
+
     }
 
     @Override
@@ -131,7 +108,6 @@ public class ContasList extends ListFragment implements DialogInterface.OnClickL
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-        info = null;
         ItemSelecionado = -1;
         if (item.getItemId() == R.id.remover) {
             AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
@@ -157,10 +133,8 @@ public class ContasList extends ListFragment implements DialogInterface.OnClickL
                 dialogConfirmacao.show();
                 break;
             case DialogInterface.BUTTON_POSITIVE:
-                contaId = (String) aContas.get(ItemSelecionado).get("id");
-                aContas.remove(ItemSelecionado);
-                removerConta(contaId);
-                getListView().invalidateViews();
+                contaId = aContas.get(ItemSelecionado).get(DatabaseHelper.KEY_ID).toString();
+                remover(contaId);
                 break;
             case DialogInterface.BUTTON_NEGATIVE:
                 dialogConfirmacao.dismiss();
@@ -168,10 +142,14 @@ public class ContasList extends ListFragment implements DialogInterface.OnClickL
         }
     }
 
-    private void removerConta(String id){
-        SQLiteDatabase db = helper.getWritableDatabase();
-        String[] where = new String[]{ id };
-        db.delete("contas","_id = ? ", where);
+    private void remover(String id){
+        int result;
+        DataSourceTools db = new DataSourceTools(helper);
+        result = db.delete(DatabaseHelper.TABLE_CARTAO,id);
+        if(result == R.string.salvar_sucesso) {
+            aContas.remove(ItemSelecionado);
+            getListView().invalidateViews();
+        }
     }
 
 }

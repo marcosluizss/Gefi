@@ -28,18 +28,18 @@ import java.util.Map;
  */
 public class CadastroConta extends Fragment {
 
+    private List<Map<String, Object>> aItens, aFinanca, aCartao, aPeriodicidade;
+    private Map<String, Object> item, result;
+
     private EditText nomeConta,dtVencimento,qtdParcelas,valParcela,valTotal;
     private RadioGroup tipoConta;
     private CheckBox debitoAutomatico;
     private Spinner financa,cartao,periodicidade;
     private Button btSalvar, btCancelar;
     private String contaId;
-    private DatabaseHelper helper;
+    private int msgId;
 
-    private List<Map<String, Object>> aFinanca;
-    private List<Map<String, Object>> aCartao;
-    private List<Map<String, Object>> aPeriodicidade;
-    private Map<String, Object> item;
+    private DatabaseHelper helper;
 
     public static CadastroConta init(){
         return new CadastroConta();
@@ -56,7 +56,7 @@ public class CadastroConta extends Fragment {
 
         helper = new DatabaseHelper(getActivity());
         Bundle extras = getArguments();
-        contaId = extras.getString("id");
+        contaId = extras.getString(DatabaseHelper.KEY_ID);
 
         return view;
     }
@@ -65,157 +65,27 @@ public class CadastroConta extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState){
         super.onActivityCreated(savedInstanceState);
 
-        SQLiteDatabase db = helper.getReadableDatabase();
+        aCartao = new ArrayList<Map<String, Object>>();
+        cartao = (Spinner) getActivity().findViewById(R.id.sp_cartao_conta);
+        result = getAdapterSpinner(DatabaseHelper.TABLE_CARTAO);
+        cartao.setAdapter((SimpleAdapter)result.get("adapter"));
+        aCartao = (List<Map<String, Object>>)result.get("itens");
+        result.clear();
 
-        try {
-            aCartao = new ArrayList<Map<String, Object>>();
+        aFinanca = new ArrayList<Map<String, Object>>();
+        financa = (Spinner) getActivity().findViewById(R.id.sp_financa_conta);
+        result = getAdapterSpinner(DatabaseHelper.TABLE_FINANCA);
+        financa.setAdapter((SimpleAdapter)result.get("adapter"));
+        aFinanca = (List<Map<String, Object>>)result.get("itens");
+        result.clear();
 
-            item = new HashMap<String, Object>();
-            item.put("id", "-1");
-            item.put("nome_cartao", " Selecione ");
-            aCartao.add(item);
+        aPeriodicidade = new ArrayList<Map<String, Object>>();
+        periodicidade = (Spinner) getActivity().findViewById(R.id.sp_periodicidade_conta);
+        result = getAdapterSpinner(DatabaseHelper.TABLE_PERIODICIDADE);
+        periodicidade.setAdapter((SimpleAdapter)result.get("adapter"));
+        aPeriodicidade = (List<Map<String, Object>>)result.get("itens");
+        result.clear();
 
-            Cursor cCartao = db.rawQuery("Select _id, nome from cartoes", null);
-            cCartao.moveToFirst();
-
-            int qtdRegistros = cCartao.getCount();
-            for (int i = 0; i < qtdRegistros; i++) {
-
-                item = new HashMap<String, Object>();
-                String id = cCartao.getString(0);
-                String nome_cartao = cCartao.getString(1);
-
-                item.put("id", id);
-                item.put("nome_cartao", nome_cartao);
-
-                aCartao.add(item);
-
-                cCartao.moveToNext();
-            }
-            cCartao.close();
-
-            String[] de = {"nome_cartao"};
-            int[] para = {android.R.id.text1};
-
-            final SimpleAdapter simpleAdapter = new SimpleAdapter(getActivity(), aCartao,android.R.layout.simple_spinner_item, de, para);
-            simpleAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            SimpleAdapter.ViewBinder viewBinder = new SimpleAdapter.ViewBinder() {
-                public boolean setViewValue(View view, Object data, String textRepresentation) {
-                    // We configured the SimpleAdapter to create TextViews (see
-                    // the 'to' array, above), so this cast should be safe:
-                    TextView textView = (TextView) view;
-                    textView.setText(textRepresentation);
-                    return true;
-                }
-            };
-            simpleAdapter.setViewBinder(viewBinder);
-
-            cartao = (Spinner)getActivity().findViewById(R.id.sp_cartao_conta);
-            cartao.setAdapter(simpleAdapter);
-
-        }catch (Exception e){
-            Log.d("DEBUG",e.toString());
-        }
-
-        try {
-            aFinanca = new ArrayList<Map<String, Object>>();
-
-            item = new HashMap<String, Object>();
-            item.put("id", "-1");
-            item.put("nome_financa", " Selecione ");
-            aFinanca.add(item);
-
-            Cursor cFinanca = db.rawQuery("Select _id, nome from financas", null);
-            cFinanca.moveToFirst();
-
-            int qtdRegistros = cFinanca.getCount();
-            for (int i = 0; i < qtdRegistros; i++) {
-
-                item = new HashMap<String, Object>();
-                String id = cFinanca.getString(0);
-                String nome_financa = cFinanca.getString(1);
-
-                item.put("id", id);
-                item.put("nome_financa", nome_financa);
-
-                aFinanca.add(item);
-
-                cFinanca.moveToNext();
-            }
-            cFinanca.close();
-
-            String[] de = {"nome_financa"};
-            int[] para = {android.R.id.text1};
-
-            final SimpleAdapter simpleAdapter = new SimpleAdapter(getActivity(), aFinanca,android.R.layout.simple_spinner_item, de, para);
-            simpleAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            SimpleAdapter.ViewBinder viewBinder = new SimpleAdapter.ViewBinder() {
-                public boolean setViewValue(View view, Object data, String textRepresentation) {
-                    // We configured the SimpleAdapter to create TextViews (see
-                    // the 'to' array, above), so this cast should be safe:
-                    TextView textView = (TextView) view;
-                    textView.setText(textRepresentation);
-                    return true;
-                }
-            };
-            simpleAdapter.setViewBinder(viewBinder);
-
-            financa = (Spinner)getActivity().findViewById(R.id.sp_financa_conta);
-            financa.setAdapter(simpleAdapter);
-
-        }catch (Exception e){
-            Log.d("DEBUG",e.toString());
-        }
-
-        //try {
-            aPeriodicidade = new ArrayList<Map<String, Object>>();
-
-            item = new HashMap<String, Object>();
-            item.put("id", "-1");
-            item.put("nome_periodicidade", " Selecione ");
-            aPeriodicidade.add(item);
-
-            Cursor cPeriodicidade = db.rawQuery("Select _id, nome from periodicidades", null);
-            cPeriodicidade.moveToFirst();
-
-            int qtdRegistros = cPeriodicidade.getCount();
-            for (int i = 0; i < qtdRegistros; i++) {
-
-                item = new HashMap<String, Object>();
-                String id = cPeriodicidade.getString(0);
-                String nome_periodicidade = cPeriodicidade.getString(1);
-
-                item.put("id", id);
-                item.put("nome_periodicidade", nome_periodicidade);
-
-                aPeriodicidade.add(item);
-
-                cPeriodicidade.moveToNext();
-            }
-            cPeriodicidade.close();
-
-            String[] de = {"nome_periodicidade"};
-            int[] para = {android.R.id.text1};
-
-            final SimpleAdapter simpleAdapter = new SimpleAdapter(getActivity(), aPeriodicidade,android.R.layout.simple_spinner_item, de, para);
-            simpleAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            SimpleAdapter.ViewBinder viewBinder = new SimpleAdapter.ViewBinder() {
-                public boolean setViewValue(View view, Object data, String textRepresentation) {
-                    // We configured the SimpleAdapter to create TextViews (see
-                    // the 'to' array, above), so this cast should be safe:
-                    TextView textView = (TextView) view;
-                    textView.setText(textRepresentation);
-                    return true;
-                }
-            };
-            simpleAdapter.setViewBinder(viewBinder);
-
-            periodicidade = (Spinner)getActivity().findViewById(R.id.sp_periodicidade_conta);
-            periodicidade.setAdapter(simpleAdapter);
-
-        /*}catch (Exception e){
-            Log.d("DEBUG",e.toString());
-        }*/
 
         nomeConta = (EditText)getActivity().findViewById(R.id.et_nome_conta);
         tipoConta = (RadioGroup)getActivity().findViewById(R.id.rg_tipo_conta);
@@ -231,7 +101,7 @@ public class CadastroConta extends Fragment {
         btSalvar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                salvarConta(view);
+                salvar(view);
             }
         });
 
@@ -242,95 +112,112 @@ public class CadastroConta extends Fragment {
             }
         });
 
-        if(contaId != "-1"){
+        if(!contaId.equals(DatabaseHelper.VALUE_ID_NULL)){
             preparaEdicao();
         }
     }
 
-    @Override
-    public void onDestroy() {
-        helper.close();
-        super.onDestroy();
-    }
-
-    public void salvarConta(View view){
-        SQLiteDatabase db = helper.getWritableDatabase();
+    public void salvar(View view){
+        DataSourceTools db = new DataSourceTools(helper);
 
         ContentValues values = new ContentValues();
 
-        values.put("nome",nomeConta.getText().toString());
-        values.put("tipo",tipoConta.getCheckedRadioButtonId()==R.id.rb_conta_receita?1:2);
-        values.put("qtd_parcelas",qtdParcelas.getText().toString());
-        values.put("valor_parcelas",valParcela.getText().toString());
-        values.put("valor_total",valTotal.getText().toString());
-        values.put("dt_vencimento",dtVencimento.getText().toString());
-        values.put("ind_debito_automatico",debitoAutomatico.isChecked()?"S":"N");
+        values.put(DatabaseHelper.KEY_NOME,nomeConta.getText().toString());
+        values.put(DatabaseHelper.KEY_TIPO,tipoConta.getCheckedRadioButtonId()==R.id.rb_conta_receita?DatabaseHelper.VALUE_RECEITA:DatabaseHelper.VALUE_DESPESA);
+        values.put(DatabaseHelper.KEY_QTD_PARECLAS,qtdParcelas.getText().toString());
+        values.put(DatabaseHelper.KEY_VAL_PARCELA,valParcela.getText().toString());
+        values.put(DatabaseHelper.KEY_VAL_TOTAL,valTotal.getText().toString());
+        values.put(DatabaseHelper.KEY_DT_VENCIMENTO,dtVencimento.getText().toString());
+        values.put(DatabaseHelper.KEY_IND_DEBITO_AUTOMATICO,debitoAutomatico.isChecked()?DatabaseHelper.VALUE_SIM:DatabaseHelper.VALUE_NAO);
 
-        try {
-            values.put("periodicidade_id", (String) aPeriodicidade.get(periodicidade.getSelectedItemPosition()).get("id"));
-        }catch (Exception e){
-            values.put("tipo_cartao_id", "");
-        }
+        values.put(DatabaseHelper.KEY_PERIODICIDADE_ID, aPeriodicidade.get(periodicidade.getSelectedItemPosition()).get(DatabaseHelper.KEY_ID).toString());
+        values.put(DatabaseHelper.KEY_FINANCA_ID, aFinanca.get(financa.getSelectedItemPosition()).get(DatabaseHelper.KEY_ID).toString());
+        values.put(DatabaseHelper.KEY_CARTAO_ID, aFinanca.get(cartao.getSelectedItemPosition()).get(DatabaseHelper.KEY_ID).toString());
 
-        try {
-            values.put("financa_id", (String) aFinanca.get(financa.getSelectedItemPosition()).get("id"));
-        }catch (Exception e){
-            values.put("financa_id", "");
-        }
-
-        try {
-            values.put("cartao_id", (String) aCartao.get(cartao.getSelectedItemPosition()).get("id"));
-        }catch (Exception e){
-            values.put("cartao_id", "");
-        }
-
-        long result = -1;
-        if(contaId == "-1") {
-            result = db.insert("contas", null, values);
+        if(contaId.equals(DatabaseHelper.VALUE_ID_NULL)) {
+            msgId = db.save(DatabaseHelper.TABLE_CONTA, values);
         }else{
-            result = db.update("contas", values, "_id = ?", new String[]{ contaId });
+            msgId = db.update(DatabaseHelper.TABLE_CONTA, values, contaId);
         }
 
-        if(result != -1){
-            Toast.makeText(getActivity(), "Registo salvo", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(),msgId,Toast.LENGTH_SHORT).show();
+        if(msgId == R.string.salvar_sucesso){
             voltaTela();
-        }else{
-            Toast.makeText(getActivity(),"Erro ao salvar registro",Toast.LENGTH_SHORT).show();
         }
+
     }
 
     public void preparaEdicao(){
-        SQLiteDatabase db = helper.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT nome, tipo, periodicidade_id, qtd_parcelas" +
-                ", valor_parcela, valor_total, financa_id, cartao_id" +
-                " dt_vencimento, ind_debito_automatico FROM contas WHERE _id = ?", new String[]{ contaId });
 
-        nomeConta.setText(cursor.getString(0));
-        tipoConta.check(cursor.getInt(1)==1?R.id.rb_conta_receita:R.id.rb_conta_despesa);
+        DataSourceTools db = new DataSourceTools(helper);
+        Map<String,Object> conta = db.find(DatabaseHelper.TABLE_CONTA,null,contaId);
 
-        try {
-            periodicidade.setSelection(
-                    Integer.parseInt((String) aPeriodicidade.get(cursor.getInt(2)).get("id")))
-            ;
-        }catch (Exception e){}
-        qtdParcelas.setText(cursor.getString(3));
-        valTotal.setText(cursor.getString(4));
-        try {
-            financa.setSelection(Integer.parseInt((String) aFinanca.get(cursor.getInt(5)).get("id")));
-        }catch (Exception e){}
-        try {
-            cartao.setSelection(Integer.parseInt((String) aCartao.get(cursor.getInt(6)).get("id")));
-        }catch (Exception e){}
+        nomeConta.setText(conta.get(DatabaseHelper.KEY_NOME).toString());
+        tipoConta.check(conta.get(DatabaseHelper.KEY_TIPO).toString().equals("1")?R.id.rb_conta_receita:R.id.rb_conta_despesa);
 
-        dtVencimento.setText(cursor.getString(7));
-        debitoAutomatico.setChecked(cursor.getString(8)=="S"?true:false);
 
-        cursor.moveToFirst();
-        cursor.close();
+        periodicidade.setSelection(getPosition(aPeriodicidade,conta.get(DatabaseHelper.KEY_PERIODICIDADE_ID).toString()));
+
+        qtdParcelas.setText(conta.get(DatabaseHelper.KEY_QTD_PARECLAS).toString());
+        valTotal.setText(conta.get(DatabaseHelper.KEY_VAL_TOTAL).toString());
+
+        financa.setSelection(getPosition(aFinanca,conta.get(DatabaseHelper.KEY_FINANCA_ID).toString()));
+        cartao.setSelection(getPosition(aCartao,conta.get(DatabaseHelper.KEY_CARTAO_ID).toString()));
+
+        dtVencimento.setText(conta.get(DatabaseHelper.KEY_DT_VENCIMENTO).toString());
+        debitoAutomatico.setChecked(conta.get(DatabaseHelper.KEY_IND_DEBITO_AUTOMATICO).equals(1));;
+
+    }
+
+    public int getPosition(List<Map<String, Object>> aItens, String valor){
+        int count;
+        count = aItens.size();
+        for(int i=1;i<count;i++){
+            if( aItens.get(i).get(DatabaseHelper.KEY_ID).toString().equals(valor) ){
+                return i;
+            }
+        }
+        return 0;
     }
 
     public void voltaTela(){
         getActivity().onBackPressed();
     }
+
+    public Map<String,Object> getAdapterSpinner(String table){
+
+        DataSourceTools db = new DataSourceTools(helper);
+
+        //busca a lista de de itens
+        aItens = new ArrayList<Map<String, Object>>();
+        item = new HashMap<String, Object>();
+        item.put(DatabaseHelper.KEY_ID, "-1");
+        item.put(DatabaseHelper.KEY_NOME,getText(R.string.selecione));
+        aItens.add(item);
+
+        aItens.addAll(db.findAll(table, null));
+
+        String[] de = {DatabaseHelper.KEY_NOME};
+        int[] para = {android.R.id.text1};
+
+        SimpleAdapter simpleAdapter = new SimpleAdapter(getActivity(), aItens,android.R.layout.simple_spinner_item, de, para);
+        simpleAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        SimpleAdapter.ViewBinder viewBinder = new SimpleAdapter.ViewBinder() {
+            public boolean setViewValue(View view, Object data, String textRepresentation) {
+                // We configured the SimpleAdapter to create TextViews (see
+                // the 'to' array, above), so this cast should be safe:
+                TextView textView = (TextView) view;
+                textView.setText(textRepresentation);
+                return true;
+            }
+        };
+        simpleAdapter.setViewBinder(viewBinder);
+
+        result = new HashMap<String, Object>();
+        result.put("adapter",simpleAdapter);
+        result.put("itens",aItens);
+        return result;
+    }
+
 
 }

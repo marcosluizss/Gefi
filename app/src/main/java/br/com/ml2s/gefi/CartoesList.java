@@ -28,12 +28,8 @@ import java.util.Map;
  */
 public class CartoesList extends ListFragment implements DialogInterface.OnClickListener {
 
-    private FragmentManager fm;
-    private FragmentTransaction ft;
-
     private List<Map<String, Object>> aCartoes;
     private AlertDialog dialogConfirmacao;
-    private AdapterView.AdapterContextMenuInfo info;
     private int ItemSelecionado;
 
     private DatabaseHelper helper;
@@ -64,34 +60,14 @@ public class CartoesList extends ListFragment implements DialogInterface.OnClick
 
         aCartoes = new ArrayList<Map<String, Object>>();
         Map<String, Object> botaoAdd = new HashMap<String, Object>();
-        botaoAdd.put("id","-1");
-        botaoAdd.put("nome","Novo Cartão");
+        botaoAdd.put(DatabaseHelper.KEY_ID,DatabaseHelper.VALUE_ID_NULL);
+        botaoAdd.put(DatabaseHelper.KEY_NOME,getText(R.string.novo_cartao));
         aCartoes.add(botaoAdd);
 
-        try {
-            SQLiteDatabase db = helper.getReadableDatabase();
-            Cursor cCartoes = db.rawQuery("Select _id, nome from cartoes", null);
+        DataSourceTools db = new DataSourceTools(helper);
+        aCartoes.addAll(db.findAll(DatabaseHelper.TABLE_CARTAO, null));
 
-            cCartoes.moveToFirst();
-            int qtdRegistros = cCartoes.getCount();
-
-            for (int i = 0; i < qtdRegistros; i++) {
-
-                Map<String, Object> cartao = new HashMap<String, Object>();
-                String id = cCartoes.getString(0);
-                String nome = cCartoes.getString(1);
-
-                cartao.put("id", id);
-                cartao.put("nome", nome);
-
-                aCartoes.add(cartao);
-
-                cCartoes.moveToNext();
-            }
-            cCartoes.close();
-        }catch (Exception e){}
-
-        String[] de = {"nome"};
+        String[] de = {DatabaseHelper.KEY_NOME};
         int[] para = {R.id.tv_menu_texto};
 
         SimpleAdapter adapter = new SimpleAdapter(getActivity().getBaseContext(), aCartoes,R.layout.menu_item, de, para);
@@ -103,13 +79,12 @@ public class CartoesList extends ListFragment implements DialogInterface.OnClick
 
     }
 
-
     @Override
     public void onListItemClick(ListView lvMenu, View view, int posicao, long id) {
 
-        cartaoId = (String) aCartoes.get(posicao).get("id");
+        cartaoId = aCartoes.get(posicao).get(DatabaseHelper.KEY_ID).toString();
         Bundle data = new Bundle();
-        data.putString("id", cartaoId);
+        data.putString(DatabaseHelper.KEY_ID, cartaoId);
 
         CadastroCartao newFragment = new CadastroCartao();
         newFragment.setArguments(data);
@@ -133,7 +108,6 @@ public class CartoesList extends ListFragment implements DialogInterface.OnClick
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-        info = null;
         ItemSelecionado = -1;
         if (item.getItemId() == R.id.remover) {
             AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
@@ -159,10 +133,8 @@ public class CartoesList extends ListFragment implements DialogInterface.OnClick
                 dialogConfirmacao.show();
                 break;
             case DialogInterface.BUTTON_POSITIVE:
-                cartaoId = (String) aCartoes.get(ItemSelecionado).get("id");
-                aCartoes.remove(ItemSelecionado);
-                removerCartao(cartaoId);
-                getListView().invalidateViews();
+                cartaoId = aCartoes.get(ItemSelecionado).get(DatabaseHelper.KEY_ID).toString();
+                remover(cartaoId);
                 break;
             case DialogInterface.BUTTON_NEGATIVE:
                 dialogConfirmacao.dismiss();
@@ -170,10 +142,14 @@ public class CartoesList extends ListFragment implements DialogInterface.OnClick
         }
     }
 
-    private void removerCartao(String id){
-        SQLiteDatabase db = helper.getWritableDatabase();
-        String[] where = new String[]{ id };
-        db.delete("cartoes","_id = ? ", where);
+    private void remover(String id){
+        int result;
+        DataSourceTools db = new DataSourceTools(helper);
+        result = db.delete(DatabaseHelper.TABLE_CARTAO,id);
+        if(result == R.string.salvar_sucesso) {
+            aCartoes.remove(ItemSelecionado);
+            getListView().invalidateViews();
+        }
     }
 
 }
